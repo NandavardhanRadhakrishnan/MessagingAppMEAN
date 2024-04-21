@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+        <link rel="stylesheet" href="style.css">
+        <!-- <base href="/"> -->
+    </head>
+    <body ng-app = "myApp">
+        <div class="container" ng-controller="chatCtrl">
+            <div id="userList">
+                <div ng-repeat = "user in users"  ng-click="changeUser(user.name)">           
+                    <div class="userDisp">
+                        <img ng-src="{{user.avatar}}">
+                        <span>{{user.name}}</span>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div id = "chatDisp">
+                <div style="height: 100%; overflow-y: scroll;">
+                    <h1>{{u}}</h1>
+                    <div ng-repeat="message in messages">
+                        <div style="display: flex; flex-direction: column;">
+                            <span id = "chatMsg" ng-class="message.direction">{{message.text}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="textbox">
+                    <input type="text" id="userMsgTextbox">
+                    <button id="userMsgButton">></button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
