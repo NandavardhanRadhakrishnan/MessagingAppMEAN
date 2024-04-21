@@ -45,6 +45,18 @@ myApp.service('AuthService', function ($http, $q, $window) {
         return deferred.promise;
     };
 
+    this.register = function (username, password) {
+        var deferred = $q.defer();
+        $http.post('/api/register', { username: username, password: password })
+            .then(function (response) {
+                deferred.resolve(response.data.message);
+            })
+            .catch(function (error) {
+                deferred.reject(error);
+            });
+        return deferred.promise;
+    };
+
     this.logout = function () {
         // Clear current user and token from localStorage
         $window.localStorage.removeItem('currentUser');
@@ -101,30 +113,24 @@ myApp.controller('chatCtrl', function ($scope, $http, AuthService) {
 myApp.controller('loginCtrl', function ($scope, $window, AuthService) {
     $scope.login = function (username, password) {
         AuthService.login(username, password)
-            .then(function (user) {
-                // Redirect to index after successful login
+            .then(function () {
                 $window.location.href = '/chat';
             })
             .catch(function (error) {
-                console.error(error);
-                // Handle login error
+                $scope.error = error.data.error;
             });
     };
 });
 
-myApp.controller('registerCtrl', function ($scope, $http) {
+myApp.controller('registerCtrl', function ($scope, $window, AuthService) {
     $scope.error = '';
 
     $scope.register = function () {
-        $http.post('/api/register', { username: $scope.username, password: $scope.password })
-            .then(function (response) {
-                // Successful registration
-                // alert(response.data.message);
-                $window.location.href = '/chat';
-                // Redirect to another page or perform any other action after successful registration
+        AuthService.register($scope.username, $scope.password)
+            .then(function () {
+                $window.location.href = '/login';
             })
             .catch(function (error) {
-                // Failed registration
                 $scope.error = error.data.error;
             });
     };

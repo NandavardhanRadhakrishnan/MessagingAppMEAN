@@ -26,15 +26,24 @@ app.use((req, res, next) => {
 // Register route
 app.post('/api/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const newUser = new User({ username, password });
-        await newUser.save();
-        res.status(201).json({ message: 'User registered successfully' });
+      const { username, password } = req.body;
+      
+      // Check if user already exists
+      const existingUser = await User.findOne({ username });
+      if (existingUser) {
+        return res.status(400).json({ error: 'User already exists' });
+      }
+  
+      // Create a new user
+      const newUser = new User({ username, password });
+      await newUser.save();
+      
+      res.json({ message: 'Registration successful', newUser });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error' });
+      console.error(err);
+      res.status(500).json({ error: 'Server error' });
     }
-});
+  });   
 
 // Login route
 app.post('/api/login', async (req, res) => {
