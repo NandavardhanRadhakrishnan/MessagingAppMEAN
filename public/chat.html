@@ -2,6 +2,7 @@
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+        <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
         <link rel="stylesheet" href="style.css">
         <!-- <base href="/"> -->
     </head>
@@ -17,17 +18,17 @@
                 </div>
             </div>
             <div id = "chatDisp">
-                <div style="height: 100%; overflow-y: scroll;">
-                    <h1>{{u}}</h1>
+                <h1 id="usernameDisp">{{clickedUser}}</h1>
+                <div id = "msgDisp">
                     <div ng-repeat="message in messages">
-                        <div style="display: flex; flex-direction: column;">
+                        <div id = "chatMsgWrapper">
                             <span id = "chatMsg" ng-class="message.direction">{{message.text}}</span>
                         </div>
                     </div>
                 </div>
-                <div id="textbox">
-                    <input type="text" id="userMsgTextbox">
-                    <button id="userMsgButton">></button>
+                <div id="textBox">
+                    <input type="text" id="textbox">
+                    <button id="textboxButton">></button>
                 </div>
             </div>
         </div>

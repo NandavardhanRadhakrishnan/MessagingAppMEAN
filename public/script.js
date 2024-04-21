@@ -79,24 +79,37 @@ myApp.service('AuthService',function($http, $q, $window){
       };
 });
 
-myApp.controller('chatCtrl',function($scope,AuthService){
+// TODO make it dynamically update when messages (mongodb) changes
+
+myApp.controller('chatCtrl',function($scope,$http,AuthService){
     $scope.users=[
-        {name:"User 1",avatar:"https://source.unsplash.com/random/200x200?sig=1"},
+        {name:"def",avatar:"https://source.unsplash.com/random/200x200?sig=1"},
     ];
     for(var i=2;i<21;i++){
         $scope.users.push({name:`User ${i}`,avatar:`https://source.unsplash.com/random/200x200?sig=${i}`});
     };
-    $scope.messages = [
-        {text:"hello a",from:"user",direction:"user-msg"},
-        {text:"hello b",from:"us",direction:"recipent-msg"},
-    ];
-    $scope.curr = ''
+    // $scope.messages = [
+    //     {text:"hello a",from:"user",direction:"user-msg"},
+    //     {text:"hello b",from:"us",direction:"recipent-msg"},
+    // ];
+
+    $scope.clickedUser = "def";
+    $scope.currUser = AuthService.getCurrentUser().username;
     $scope.changeUser = function(userName) {
-        $scope.curr = '';
-        $scope.messages.push({text:userName,from:"user",direction:"user-msg"});
+        $scope.clickedUser = userName;
+        $http.post('/api/messages',{clickedUser:$scope.clickedUser,currUser:$scope.currUser})
+        .then(function(response){
+        $scope.messages = response.data;
+        console.log(response.data);
+
+    })
     };
-    $scope.u = "not logged in";
-    $scope.u = AuthService.getCurrentUser().username;
+    $http.post('/api/messages',{clickedUser:$scope.clickedUser,currUser:$scope.currUser})
+    .then(function(response){
+        $scope.messages = response.data;
+        console.log(response.data);
+
+    })
 });
 
 myApp.controller('loginCtrl', function($scope, $window, AuthService) {

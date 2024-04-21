@@ -4,6 +4,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const User = require('./models/user');
+const Message = require('./models/message');
+const { error } = require('console');
 const app = express();
 
 // Connect to MongoDB
@@ -49,6 +51,68 @@ app.post('/api/login', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+app.post('/api/messages', async (req, res) => {
+  try {
+      const { currUser, clickedUser } = req.body;
+
+      if (!currUser || !clickedUser) {
+          return res.status(400).json({ error: 'Current user and clicked user are required' });
+      }
+
+      const messages = await Message.aggregate([
+          {
+              $match: {
+                  $or: [
+                      { fromUser: currUser, toUser: clickedUser },
+                      { fromUser: clickedUser, toUser: currUser }
+                  ]
+              }
+          },
+          {
+              $project: {
+                  message: 1,
+                  direction: {
+                      $cond: {
+                          if: { $eq: ["$fromUser", currUser] },
+                          then: "user-msg",
+                          else: "recipient-msg"
+                      }
+                  },
+                  timestamp: 1
+              }
+          },
+          {
+              $sort: { timestamp: 1 }
+          }
+      ]);
+
+      const transformedMessages = messages.map(msg => {
+          return {
+              text: msg.message,
+              from: msg.direction === 'user-msg' ? 'user' : 'recipient',
+              direction: msg.direction
+          };
+      });
+
+      res.json(transformedMessages);
+  } catch (error) {
+      console.error('Error fetching messages:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/sendMessage', async(req,res) =>{
+  try{
+    const {fromUser,toUser,message} = req.body;
+    const newMessage = new Message({ fromUser, toUser, message });
+    newMessage.save();
+    res.status(201).json({ message: 'Message sent successfully' });
+  } catch(err){
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+})
 
 app.use(express.static('public'));
 
