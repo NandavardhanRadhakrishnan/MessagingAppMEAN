@@ -9,10 +9,10 @@
     <body ng-app = "myApp">
         <div class="container" ng-controller="chatCtrl">
             <div id="userList">
-                <div ng-repeat = "user in users"  ng-click="changeUser(user.name)">           
+                <div ng-repeat = "user in users"  ng-click="changeUser(user.username)">           
                     <div class="userDisp">
                         <img ng-src="{{user.avatar}}">
-                        <span>{{user.name}}</span>
+                        <span>{{user.username}}</span>
                     </div>
                     <hr>
                 </div>

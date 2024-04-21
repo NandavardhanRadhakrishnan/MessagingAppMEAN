@@ -102,7 +102,7 @@ app.post('/api/messages', async (req, res) => {
   }
 });
 
-app.post('/api/sendMessage', async(req,res) =>{
+app.post('/api/sendMessage', async(req,res) => {
   try{
     const {fromUser,toUser,message} = req.body;
     const newMessage = new Message({ fromUser, toUser, message });
@@ -113,6 +113,20 @@ app.post('/api/sendMessage', async(req,res) =>{
     res.status(500).json({ error: 'Server error' });
   } 
 })
+
+app.post('/api/users', async (req, res) => {
+  try {
+    const users = await User.find({}, 'username'); // Only retrieve the username field
+    const usersWithAvatars = users.map(user => ({
+      username: user.username,
+      avatar: `https://source.unsplash.com/random/200x200?sig=${Math.floor(Math.random() * 1000)}` // Generating random signature for avatar
+    }));
+    res.json(usersWithAvatars);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.use(express.static('public'));
 
