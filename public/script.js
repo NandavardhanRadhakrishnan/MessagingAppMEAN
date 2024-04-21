@@ -21,8 +21,14 @@ myApp.config(function ($routeProvider, $locationProvider) {
             templateUrl: "register.html",
             controller: "registerCtrl"
         })
+        .when('/home', {
+            templateUrl: "home.html"
+        })
+        .when('/about', {
+            templateUrl: "about.html"
+        })
         .otherwise({
-            redirectTo: '/login'
+            redirectTo: '/home'
         });
 
     $locationProvider.html5Mode(true);
@@ -79,20 +85,23 @@ myApp.service('AuthService', function ($http, $q, $window) {
 myApp.controller('chatCtrl', function ($scope, $http, AuthService) {
 
     $scope.currUser = AuthService.getCurrentUser().username;
-    $http.post('api/users', {}).then(function (response) {
+    $http.post('/api/users', {}).then(function (response) {
         $scope.users = response.data.filter(item => item.username !== $scope.currUser);
-        // console.log($scope.users[0]);
-        $scope.clickedUser = $scope.users[0].username;
-        updateMessage();
-
-    })
+        if ($scope.users.length > 0) {
+            $scope.clickedUser = $scope.users[0].username;
+            updateMessage();
+        }
+    });
+    
 
     function updateMessage() {
-        $http.post('/api/messages', { clickedUser: $scope.clickedUser, currUser: $scope.currUser })
+        $http.post('/api/messages', { currUser: $scope.currUser, clickedUser: $scope.clickedUser })
             .then(function (response) {
                 $scope.messages = response.data;
-                $scope.$apply();
             })
+            .catch(function (error) {
+                console.error('Error fetching messages:', error);
+            });
     }
 
     $scope.changeUser = function (userName) {
@@ -101,12 +110,17 @@ myApp.controller('chatCtrl', function ($scope, $http, AuthService) {
     };
 
     $scope.sendMsg = () => {
+        console.log('Sending message:', { fromUser: $scope.currUser, toUser: $scope.clickedUser, message: $scope.msgTextbox });
         $http.post('/api/sendMessage', { fromUser: $scope.currUser, toUser: $scope.clickedUser, message: $scope.msgTextbox })
             .then(function (response) {
                 updateMessage();
                 $scope.msgTextbox = '';
+            })
+            .catch(function (error) {
+                console.error('Error sending message:', error);
             });
-    }
+    };
+    
 
 });
 
