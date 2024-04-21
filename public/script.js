@@ -30,21 +30,6 @@ myApp.config(function($routeProvider,$locationProvider){
     $locationProvider.html5Mode(true);
 });
 
-// myApp.config(function($routeProvider){
-//     $routeProvider
-//     .when('/chat',{
-//         templateUrl: 'chat.html',
-//         controller:'loginCtrl'
-//     })
-    
-//     .when('/login',{
-//         templateUrl:'login.html',
-//         controller:'loginCtrl'
-//     })
-//     .otherwise({redirectTo:'/login'});
-// })
-
-
 myApp.service('AuthService',function($http, $q, $window){
 
     this.login = function(username, password) {
@@ -84,6 +69,7 @@ myApp.service('AuthService',function($http, $q, $window){
 myApp.controller('chatCtrl',function($scope,$http,AuthService){
     $scope.users=[
         {name:"def",avatar:"https://source.unsplash.com/random/200x200?sig=1"},
+        {name:"abc",avatar:"https://source.unsplash.com/random/200x200?sig=2"}
     ];
     for(var i=2;i<21;i++){
         $scope.users.push({name:`User ${i}`,avatar:`https://source.unsplash.com/random/200x200?sig=${i}`});
@@ -95,21 +81,30 @@ myApp.controller('chatCtrl',function($scope,$http,AuthService){
 
     $scope.clickedUser = "def";
     $scope.currUser = AuthService.getCurrentUser().username;
-    $scope.changeUser = function(userName) {
-        $scope.clickedUser = userName;
+    
+    function updateMessage(){
         $http.post('/api/messages',{clickedUser:$scope.clickedUser,currUser:$scope.currUser})
         .then(function(response){
-        $scope.messages = response.data;
-        console.log(response.data);
-
+            $scope.messages = response.data;
+            console.log(messages);
+            $scope.$apply();
     })
+    }
+
+    $scope.changeUser = function(userName) {
+        $scope.clickedUser = userName;
+        updateMessage();
     };
-    $http.post('/api/messages',{clickedUser:$scope.clickedUser,currUser:$scope.currUser})
-    .then(function(response){
-        $scope.messages = response.data;
-        console.log(response.data);
 
-    })
+    $scope.sendMsg = () => {
+        $http.post('/api/sendMessage',{fromUser:$scope.currUser,toUser:$scope.clickedUser,message:$scope.msgTextbox})
+        .then(function(response){
+            updateMessage();
+            $scope.msgTextbox = '';
+        });
+    }
+
+    updateMessage();
 });
 
 myApp.controller('loginCtrl', function($scope, $window, AuthService) {
