@@ -111,17 +111,33 @@ app.post('/api/messages', async (req, res) => {
     }
 });
 
+// Define the /api/sendMessage endpoint
 app.post('/api/sendMessage', async (req, res) => {
     try {
+        // Extract the necessary data from the request body
         const { fromUser, toUser, message } = req.body;
+        
+        // Validate the data (optional)
+        if (!fromUser || !toUser || !message) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        // Process the message (e.g., save it to the database)
+        // You can use your Message model to save the message
+        // For example:
         const newMessage = new Message({ fromUser, toUser, message });
-        newMessage.save();
+        await newMessage.save();
+
+        // Respond with a success message
         res.status(201).json({ message: 'Message sent successfully' });
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        // Handle any errors that occur during message processing
+        console.error('Error sending message:', error);
         res.status(500).json({ error: 'Server error' });
     }
-})
+});
+
+
 
 app.post('/api/users', async (req, res) => {
     try {
