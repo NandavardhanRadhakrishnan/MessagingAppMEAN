@@ -1,5 +1,12 @@
 body{
     margin: 0;
+    
+}
+
+#usernameDisp {
+    background-color: whitesmoke;
+    padding: 20px;
+    margin: 0px;
 }
 
 .container{

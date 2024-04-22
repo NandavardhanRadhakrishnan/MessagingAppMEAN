@@ -14,13 +14,40 @@
                 <label for="username">Username:</label>
                 <input type="text" id="username" ng-model="username" required>
             </div>
+            <div style="height: 10px;"></div>
+
             <div>
                 <label for="password">Password:</label>
                 <input type="password" id="password" ng-model="password" required>
             </div>
+            <div style="height: 10px;"></div>
+
             <button type="submit">Register</button>
+            <div style="height: 10px;"></div>
+
         </form>
         <div ng-show="error" class="error">{{error}}</div>
     </div>
+
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            max-width: 500px;
+            max-height: 200px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            border-style: solid;
+            text-align: center;
+        }
+
+        .error{
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </body>
 </html>
