@@ -80,9 +80,8 @@ myApp.service('AuthService', function ($http, $q, $window) {
     };
 });
 
-// TODO make it dynamically update when messages (mongodb) changes
 
-myApp.controller('chatCtrl', function ($scope, $http, AuthService) {
+myApp.controller('chatCtrl', function ($scope, $http, AuthService, $interval) {
 
     $scope.currUser = AuthService.getCurrentUser().username;
     $http.post('/api/users', {}).then(function (response) {
@@ -120,8 +119,7 @@ myApp.controller('chatCtrl', function ($scope, $http, AuthService) {
                 console.error('Error sending message:', error);
             });
     };
-    
-
+    var intervalPromise = $interval(updateMessage,1000);
 });
 
 myApp.controller('loginCtrl', function ($scope, $window, AuthService) {
