@@ -22,7 +22,11 @@
                 <div id = "msgDisp">
                     <div ng-repeat="message in messages">
                         <div id = "chatMsgWrapper">
-                            <span id = "chatMsg" ng-class="message.direction">{{message.text}}</span>
+                            <span id = "chatMsg" ng-class="message.direction">{{message.text}}
+                                <span class = "timestampSpan">
+                                    {{message.timestamp}}
+                                </span>
+                            </span>
                         </div>
                     </div>
                 </div>

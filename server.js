@@ -26,24 +26,24 @@ app.use((req, res, next) => {
 // Register route
 app.post('/api/register', async (req, res) => {
     try {
-      const { username, password } = req.body;
-      
-      // Check if user already exists
-      const existingUser = await User.findOne({ username });
-      if (existingUser) {
-        return res.status(400).json({ error: 'User already exists' });
-      }
-  
-      // Create a new user
-      const newUser = new User({ username, password });
-      await newUser.save();
-      
-      res.json({ message: 'Registration successful', newUser });
+        const { username, password } = req.body;
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: 'User already exists' });
+        }
+
+        // Create a new user
+        const newUser = new User({ username, password });
+        await newUser.save();
+
+        res.json({ message: 'Registration successful', newUser });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Server error' });
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
     }
-  });   
+});
 
 // Login route
 app.post('/api/login', async (req, res) => {
@@ -96,11 +96,24 @@ app.post('/api/messages', async (req, res) => {
             }
         ]);
 
+        var options = {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour12: false,
+            timeZone: "Asia/Kolkata" // Set to GMT+5:30 timezone
+        };
+
         const transformedMessages = messages.map(msg => {
+            var date = new Date(msg.timestamp);
             return {
                 text: msg.message,
                 from: msg.direction === 'user-msg' ? 'user' : 'recipient',
-                direction: msg.direction
+                direction: msg.direction,
+                timestamp: date.toLocaleString('en-GB', options)
             };
         });
 
@@ -116,7 +129,7 @@ app.post('/api/sendMessage', async (req, res) => {
     try {
         // Extract the necessary data from the request body
         const { fromUser, toUser, message } = req.body;
-        
+
         // Validate the data (optional)
         if (!fromUser || !toUser || !message) {
             return res.status(400).json({ error: 'Missing required fields' });

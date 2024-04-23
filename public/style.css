@@ -94,11 +94,20 @@ body{
     border-radius: 20px 20px 3px 20px;
     color: white;
     background-color: rgb(66, 165, 245);    
+    font-size: large;
 }
 
 .recipient-msg{
     margin: 10px auto 10px 10px;
     border-radius: 20px 20px 20px 3px;
     background-color: rgb(241, 241, 241);
+    font-size: large;
+
+}
+
+.timestampSpan{
+    display: block;
+    font-size: small;
+    margin-top: 5px;
 }
 
