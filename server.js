@@ -9,7 +9,7 @@ const { error } = require('console');
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/messagingApp', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://nr3648:admin@cluster0.ehlwnc4.mongodb.net/messagingApp', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
 
