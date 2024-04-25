@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+	<script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+	<base href="/">
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			background-color: whitesmoke;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		header {
+			background-color: #8f0a00;
+			color: white;
+			padding: 10px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.navbar {
+			display: flex;
+			gap: 20px;
+		}
+
+		.navbar a {
+			color: white;
+			text-decoration: none;
+		}
+
+		main {
+			flex-grow: 1;
+			/* padding: 20px; */
+		}
+
+		footer {
+			/* background-color: #333; */
+			background-color: #8f0a00;
+			color: white;
+			text-align: center;
+			padding: 10px 0;
+			width: 100%;
+		}
+
+		img {
+			justify-content: center;
+		}
+
+		a {
+			font-family: sans-serif;
+			font-size: large;
+		}
+	</style>
+</head>
+
+
+<body ng-app="myApp">
+	<header>
+		<h1>Peer to Peer Communication</h1>
+		<nav class="navbar">
+			<a href="/index">Home</a>
+			<a href="/about">About</a>
+			<a href="/register">Register</a>
+			<a href="/login">Login</a>
+			<a href="/chat">Chat</a>
+		</nav>
+	</header>
+	<main>
+		<div ng-view> </div>
+		<!-- Add your central page content here -->
+	</main>
+	<footer>
+		<p>&copy; 2024 Nandavardhan-Ankit. All Rights Reserved.</p>
+	</footer>
+	<script src="script.js"></script>
+
+</body>
+
+</html>
