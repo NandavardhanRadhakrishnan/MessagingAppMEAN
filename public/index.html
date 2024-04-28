@@ -64,13 +64,14 @@
 
 
 <body ng-app="myApp">
-	<header>
+	<header ng-controller="logoutCtrl">
 		<h1>Peer to Peer Communication</h1>
 		<nav class="navbar">
 			<a href="/index">Home</a>
 			<a href="/about">About</a>
 			<a href="/register">Register</a>
 			<a href="/login">Login</a>
+			<a ng-click ="logout()">Logout</a>
 			<a href="/chat">Chat</a>
 		</nav>
 	</header>

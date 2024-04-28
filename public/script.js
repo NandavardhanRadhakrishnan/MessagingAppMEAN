@@ -148,4 +148,9 @@ myApp.controller('registerCtrl', function ($scope, $window, AuthService) {
     };
 });
 
-myApp.controller("myCtrl", function ($scope) { });
+myApp.controller("logoutCtrl", function ($scope, AuthService, $window) { 
+    $scope.logout = () => {
+        AuthService.logout();
+        $window.location.href = '/login';
+    }
+});
