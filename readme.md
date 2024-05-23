@@ -1,1 +1,1 @@
-Messaging site made using MEAN stack
+Messaging site made using MEAN stack as a mini project
